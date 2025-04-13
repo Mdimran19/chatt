@@ -25,10 +25,9 @@ export const signup = async (req, res) => {
       email,
       password: hash,
     });
-
+    await newUser.save()
     if(newUser) {
-      generateToken(newUser._id,res)
-      await newUser.save();
+      generateToken(newUser._id,res);
       res.status(201).json({
         _id:newUser._id,
         fullName: newUser.fullName,
@@ -74,8 +73,6 @@ export const login = async (req, res) => {
       
       profilePic: user.profilePic,
     })
-
-   // res.status(200).json({ message: 'login success!', generateToken });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'server error', error: error.message });

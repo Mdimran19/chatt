@@ -1,25 +1,50 @@
-
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import Navbar from './components/Navbar'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import Home from './pages/Home'
+import SignUpPage from './pages/SignUpPage'
+import LoginPage from './pages/LoginPage'
+import SettingsPage from './pages/SettingsPage'
+import ProfilePage from './pages/ProfilePage'
+import { useAuthStore } from './store/useAuthStore'
+import { Loader } from "lucide-react"
+import { Toaster } from 'react-hot-toast'
 const App = () => {
+  const { authUser, checkAuth, isCheckingAuth } = useAuthStore()
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth]);
+  console.log({ authUser });
+
+  if (isCheckingAuth && !authUser) return (
+    <div className='flex items-center justify-between h-screen'>
+      <Loader className='size-10 animate-spin' />
+    </div>
+  )
+
   return (
     <div>
-      <div className="card bg-base-100 w-96 shadow-sm">
-  <figure>
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-      alt="Shoes" />
-  </figure>
-  <div className="card-body">
-    <h2 className="card-title">Card Title</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-    <div className="card-actions justify-end">
-      <button className="btn btn-primary ">Buy Now</button>
-    </div>
-  </div>
-</div>
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/signup' element={<SignUpPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/settings' element={<SettingsPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
+      </Routes>
+      <Toaster />
     </div>
   )
 }
 
 export default App
+
+
+
+// <Route path='/' element={ authUser ? <Home/> : <Navigate to="login" />} />
+// <Route path='/signup' element={ !authUser ? <SignUpPage/>: <Navigate to="/" />} />
+// <Route path='/login' element={ !authUser ? <LoginPage/> : <Navigate to="/" />} />
+// <Route path='/settings' element={ <SettingsPage/> } />
+// <Route path='/profile' element={ authUser ?<ProfilePage/> : <Navigate to="login" />} />
+// </Routes> 
+
