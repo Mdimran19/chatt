@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore';
 import { MessageSquare, User, Mail, Lock, EyeOff, Eye } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthImagePattern from '../components/AuthImagePattern';
 import toast from 'react-hot-toast';
 
@@ -11,6 +11,7 @@ const SignUpPage = () => {
     email: '',
     password: '',
   });
+  const navigate = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
   const { signup, isSignUp } = useAuthStore();
   const validateForm = () => {
@@ -22,14 +23,15 @@ const SignUpPage = () => {
 
     return true
   }
- 
-   const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const success = validateForm()
 
-    if(success===true) signup(formData);
-   }
+    if (success === true) signup(formData);
+    navigate('/login')
+  }
   return (
     <div className='min-h-screen grid lg:grid-cols-2'>
       {/*left side */}
